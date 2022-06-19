@@ -79,6 +79,123 @@
             </TableInfoDTO>
           </value>
         </entry>
+        <entry key="com.project.simbot.entity.Notify">
+          <value>
+            <TableInfoDTO>
+              <option name="comment" value="包名: com.project.simbot.entity" />
+              <option name="fullColumn">
+                <list>
+                  <ColumnInfoDTO>
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map />
+                    </option>
+                    <option name="name" value="serialVersionUID" />
+                    <option name="type" value="long" />
+                  </ColumnInfoDTO>
+                </list>
+              </option>
+              <option name="name" value="Notify" />
+              <option name="preName" value="" />
+              <option name="saveModelName" value="" />
+              <option name="savePackageName" value="" />
+              <option name="savePath" value="" />
+              <option name="templateGroupName" value="" />
+            </TableInfoDTO>
+          </value>
+        </entry>
+        <entry key="notify_user">
+          <value>
+            <TableInfoDTO>
+              <option name="fullColumn">
+                <list>
+                  <ColumnInfoDTO>
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map>
+                        <entry key="jdbcType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                        <entry key="sqlType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                      </map>
+                    </option>
+                    <option name="name" value="id" />
+                    <option name="type" value="java.lang.Integer" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map>
+                        <entry key="jdbcType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                        <entry key="sqlType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                      </map>
+                    </option>
+                    <option name="name" value="username" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map>
+                        <entry key="jdbcType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                        <entry key="sqlType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                      </map>
+                    </option>
+                    <option name="name" value="password" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map>
+                        <entry key="jdbcType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                        <entry key="sqlType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                      </map>
+                    </option>
+                    <option name="name" value="token" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                </list>
+              </option>
+              <option name="name" value="NotifyUser" />
+              <option name="preName" value="notify_" />
+              <option name="saveModelName" value="simbot-mirai-health" />
+              <option name="savePackageName" value="com.project.simbot" />
+              <option name="savePath" value="./src/main/java/com/project/simbot" />
+              <option name="templateGroupName" value="MyBatis" />
+            </TableInfoDTO>
+          </value>
+        </entry>
         <entry key="sys_config">
           <value>
             <TableInfoDTO>
@@ -523,58 +640,16 @@
                   <ColumnInfoDTO>
                     <option name="custom" value="false" />
                     <option name="ext">
-                      <map>
-                        <entry key="jdbcType">
-                          <value>
-                            <Object />
-                          </value>
-                        </entry>
-                        <entry key="sqlType">
-                          <value>
-                            <Object />
-                          </value>
-                        </entry>
-                      </map>
+                      <map />
                     </option>
                     <option name="name" value="id" />
                     <option name="type" value="java.lang.Integer" />
                   </ColumnInfoDTO>
                   <ColumnInfoDTO>
-                    <option name="comment" value="权限账号" />
-                    <option name="custom" value="false" />
-                    <option name="ext">
-                      <map>
-                        <entry key="jdbcType">
-                          <value>
-                            <Object />
-                          </value>
-                        </entry>
-                        <entry key="sqlType">
-                          <value>
-                            <Object />
-                          </value>
-                        </entry>
-                      </map>
-                    </option>
-                    <option name="name" value="accountcode" />
-                    <option name="type" value="java.lang.String" />
-                  </ColumnInfoDTO>
-                  <ColumnInfoDTO>
                     <option name="comment" value="权限等级 1超级管理员" />
                     <option name="custom" value="false" />
                     <option name="ext">
-                      <map>
-                        <entry key="jdbcType">
-                          <value>
-                            <Object />
-                          </value>
-                        </entry>
-                        <entry key="sqlType">
-                          <value>
-                            <Object />
-                          </value>
-                        </entry>
-                      </map>
+                      <map />
                     </option>
                     <option name="name" value="level" />
                     <option name="type" value="java.lang.String" />
@@ -583,20 +658,18 @@
                     <option name="comment" value="类型 0账户 1为群组" />
                     <option name="custom" value="false" />
                     <option name="ext">
-                      <map>
-                        <entry key="jdbcType">
-                          <value>
-                            <Object />
-                          </value>
-                        </entry>
-                        <entry key="sqlType">
-                          <value>
-                            <Object />
-                          </value>
-                        </entry>
-                      </map>
+                      <map />
                     </option>
                     <option name="name" value="type" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="权限账号" />
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map />
+                    </option>
+                    <option name="name" value="accountCode" />
                     <option name="type" value="java.lang.String" />
                   </ColumnInfoDTO>
                 </list>
@@ -1193,6 +1266,121 @@
               </option>
               <option name="name" value="TaskHealth" />
               <option name="preName" value="" />
+              <option name="saveModelName" value="simbot-mirai-health" />
+              <option name="savePackageName" value="com.project.simbot" />
+              <option name="savePath" value="./src/main/java/com/project/simbot" />
+              <option name="templateGroupName" value="MyBatis" />
+            </TableInfoDTO>
+          </value>
+        </entry>
+        <entry key="task_notify">
+          <value>
+            <TableInfoDTO>
+              <option name="fullColumn">
+                <list>
+                  <ColumnInfoDTO>
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map>
+                        <entry key="jdbcType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                        <entry key="sqlType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                      </map>
+                    </option>
+                    <option name="name" value="id" />
+                    <option name="type" value="java.lang.Integer" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="学号" />
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map>
+                        <entry key="jdbcType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                        <entry key="sqlType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                      </map>
+                    </option>
+                    <option name="name" value="stuNumber" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="姓名" />
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map>
+                        <entry key="jdbcType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                        <entry key="sqlType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                      </map>
+                    </option>
+                    <option name="name" value="stuName" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="QQ号" />
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map>
+                        <entry key="jdbcType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                        <entry key="sqlType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                      </map>
+                    </option>
+                    <option name="name" value="stuCode" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="群聊账号" />
+                    <option name="custom" value="false" />
+                    <option name="ext">
+                      <map>
+                        <entry key="jdbcType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                        <entry key="sqlType">
+                          <value>
+                            <Object />
+                          </value>
+                        </entry>
+                      </map>
+                    </option>
+                    <option name="name" value="groupCode" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                </list>
+              </option>
+              <option name="name" value="TaskNotify" />
+              <option name="preName" value="task_" />
               <option name="saveModelName" value="simbot-mirai-health" />
               <option name="savePackageName" value="com.project.simbot" />
               <option name="savePath" value="./src/main/java/com/project/simbot" />

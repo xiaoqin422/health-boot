@@ -170,5 +170,11 @@ public class TaskHealthAutoTaskListen {
     public void search(PrivateMsg msg, Sender sender) {
         sender.sendPrivateMsg(msg, SendMessageUtil.getOrder());
     }
+    @OnPrivate
+    @Filter(value = "2333", matchType = MatchType.EQUALS)
+    public void search01(PrivateMsg msg, Sender sender) {
+        sender.sendPrivateMsg(msg, SendMessageUtil.getOrder());
+    }
+
 
 }

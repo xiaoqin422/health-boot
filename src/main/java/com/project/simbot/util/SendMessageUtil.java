@@ -1,6 +1,9 @@
 package com.project.simbot.util;
 
+import catcode.CatCodeUtil;
 import com.project.simbot.entity.TaskHealth;
+
+import java.util.Random;
 
 /**
  * 包名: com.project.simbot.util
@@ -12,14 +15,15 @@ import com.project.simbot.entity.TaskHealth;
  * @author: 秦笑笑
  **/
 public class SendMessageUtil {
+    private static final Random RANDOM = new Random();
     public static StringBuilder getHealthTaskMessageSuccessHeader() {
         return new StringBuilder().append("指令执行完毕。"
-                + "\n--------------------------------------\n");
+                + "\n-------------------\n");
     }
 
     public static StringBuilder getHealthTaskMessageFailHeader() {
         return new StringBuilder().append("指令执行异常。"
-                + "\n--------------------------------------\n");
+                + "\n-------------------\n");
     }
 
     public static StringBuilder getHealthTaskMessageLog(String log) {
@@ -40,8 +44,8 @@ public class SendMessageUtil {
     }
 
     public static String getOrder() {
-        return "私聊指令\n" +
-                "--------------------------------------\n" +
+        return  generateHeadFace() +"私聊指令\n" +
+                "-------------------\n" +
                 "【1】软件学院打卡\n" +
                 "【2】软件学院打卡-身份证号-打卡地址\n" +
                 "【3】软件学院打卡信息绑定\n" +
@@ -52,18 +56,18 @@ public class SendMessageUtil {
                 "【8】软件学院打卡取消定时（需管理员添加用户）\n" +
                 "【9】软件学院打卡任务日志查询\n" +
                 "【10】指令查询\n" +
-                "--------------------------------------\n" +
-                "群聊指令\n" +
-                "--------------------------------------\n" +
+                "-------------------\n" +
+                generateHeadFace() + "群聊指令\n" +
+                "-------------------\n" +
                 "【1】软件学院打卡\n" +
                 "【2】软件学院打卡加入定时\n" +
                 "【3】软件学院打卡取消定时\n" +
                 "【4】软件学院打卡任务查询\n" +
                 "【5】软件学院打卡任务日志查询\n" +
                 "【6】指令查询\n" +
-                "--------------------------------------\n" +
-                "管理指令（需管理员权限）\n" +
-                "--------------------------------------\n" +
+                "-------------------\n" +
+                generateHeadFace() + "管理指令（需管理员权限）\n" +
+                "-------------------\n" +
                 "【1】  软件学院打卡任务禁用-QQ号码\n" +
                 "【2】  软件学院打卡任务启用-QQ号码\n" +
                 "【3】  软件学院打卡任务删除-QQ号码\n" +
@@ -80,7 +84,10 @@ public class SendMessageUtil {
                 "【14】软件学院打卡群聊管理\n" +
                 "【15】软件学院打卡任务日志管理\n" +
                 "【16】软件学院打卡任务日志查询-QQ号码\n" +
-                "【17】软件学院打卡执行定时\n";
+                "【17】软件学院打卡执行定时\n" +
+                "【18】软件学院打卡监控群聊-QQ群号码\n" +
+                "【19】软件学院打卡查询\n" +
+                "【20】软件学院打卡督促\n";
     }
 
     public static String getTaskInfo(TaskHealth taskHealth) {
@@ -108,5 +115,11 @@ public class SendMessageUtil {
                 .append("打卡地址：").append(taskHealth.getAddress()).append("\n")
                 .append("任务状态：").append(!"0".equals(taskHealth.getStatus()) ? "启用" : "禁用").append("\n")
                 .append("是否加入定时：").append("2".equals(taskHealth.getStatus()) ? "是" : "否").append("\n");
+    }
+    public static StringBuilder generateHeadFace(){
+        return new StringBuilder(CatCodeUtil.INSTANCE.getNekoTemplate().face(RANDOM.nextInt(248)));
+    }
+    public static StringBuilder generateNotifyMsg(){
+        return generateHeadFace().append( "体温打卡小贴士\n");
     }
 }

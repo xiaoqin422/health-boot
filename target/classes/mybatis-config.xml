@@ -33,5 +33,7 @@
     <mappers>
         <mapper resource="mapper/TaskHealthDao.xml"/>
         <mapper resource="mapper/RoleDao.xml"/>
+        <mapper resource="mapper/NotifyDao.xml"/>
+        <mapper resource="mapper/UserDao.xml"/>
     </mappers>
 </configuration>

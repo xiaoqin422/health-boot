@@ -35,6 +35,13 @@
           and type = '0';
     </select>
 
+    <select id="selectGroupCodeByLevel" resultType="String">
+        SELECT account_code
+        from sys_role
+        WHERE level = #{level}
+          and type = '1';
+    </select>
+
     <select id="selectAllAccountCode" resultType="String">
         SELECT account_code
         from sys_role

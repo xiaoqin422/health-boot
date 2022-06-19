@@ -1,14 +1,22 @@
 package com.project.simbot.service.impl;
 
+import catcode.CatCodeUtil;
+import catcode.Neko;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.project.simbot.service.TaskHealthService;
-import com.project.simbot.service.TaskWXTask;
+import com.project.simbot.util.MsgUtil;
+import com.project.simbot.util.SendMessageUtil;
 import love.forte.common.ioc.annotation.Beans;
 import love.forte.common.ioc.annotation.Depend;
+import love.forte.simbot.api.message.results.GroupFullInfo;
+import love.forte.simbot.api.message.results.GroupMemberInfo;
+import love.forte.simbot.api.message.results.GroupMemberList;
+import love.forte.simbot.api.sender.Getter;
+import love.forte.simbot.api.sender.Sender;
 import love.forte.simbot.timer.Cron;
 import love.forte.simbot.timer.EnableTimeTask;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 包名: com.project.simbot.service.impl
@@ -22,19 +30,31 @@ import java.util.List;
 @EnableTimeTask
 @Beans
 public class AutoTaskService {
-    public static List<String> sessions = new ArrayList<>();
     @Depend
     private TaskHealthService taskHealthService;
     @Depend
-    private TaskWXTask taskWXTask;
-
+    private MsgUtil msgUtil;
+    @Depend
+    private TaskNotifyServiceImpl taskNotifyService;
     @Cron(value = "0 5 8 * * ?", delay = 1000)
     public void doHealthAutoTask() {
         taskHealthService.autoTask();
     }
 
-    @Cron(value = "0 15 * * * ? *")
-    public void keepSessions(){
-        sessions.removeIf(session -> !taskWXTask.keepLife(session));
+    @Cron(value = "0 0 9,10,11 * * ? ")
+    public void doNotifyTask(){
+        if (taskNotifyService.classIsFinished()){
+            msgUtil.sendMsg(SendMessageUtil.getHealthTaskMessageSuccessHeader() + "所有人员打卡任务执行成功！");
+        }else {
+            taskNotifyService.doAtNotify(false);
+        }
+    }
+    @Cron(value = "0 30 9 * * ? ")
+    public void doNotifyTask_1(){
+        if (taskNotifyService.classIsFinished()){
+            msgUtil.sendMsg(SendMessageUtil.getHealthTaskMessageSuccessHeader() + "所有人员打卡任务执行成功！");
+        }else {
+            taskNotifyService.doAtNotify(false);
+        }
     }
 }

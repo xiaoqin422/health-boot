@@ -35,7 +35,7 @@ public interface RoleDao {
      * @return 查询结果集
      */
     List<String> selectAccountCodeByLevel(String level);
-
+    List<String> selectGroupCodeByLevel(String level);
     /**
      * 查找所有的权限群组
      *

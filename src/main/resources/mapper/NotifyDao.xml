@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.simbot.dao.NotifyDao">
+    <!-- 结果集 -->
+    <resultMap type="com.project.simbot.entity.Notify" id="NotifyMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="stuNumber" column="stu_number" jdbcType="VARCHAR"/>
+        <result property="stuName" column="stu_name" jdbcType="VARCHAR"/>
+        <result property="stuCode" column="stu_code" jdbcType="VARCHAR"/>
+        <result property="groupCode" column="group_code" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <!-- 基本字段 -->
+    <sql id="Base_Column_List">
+        id, stu_number, stu_name, stu_code, group_code    </sql>
+
+    <select id="searchByGroupCode" resultType="string" parameterType="string">
+        SELECT
+            stu_code
+        from task_notify
+        where group_code = #{groupCode}
+    </select>
+
+    <select id="searchStuCode" resultMap="NotifyMap" parameterType="string">
+        SELECT
+        <include refid="Base_Column_List" />
+        from task_notify
+        where stu_Code = #{stuNumber}
+    </select>
+
+    <!-- 查询单个 -->
+    <select id="selectById" resultMap="NotifyMap">
+        select
+          <include refid="Base_Column_List" />
+        from task_notify
+        where id = #{id}
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="selectPage" resultMap="NotifyMap">
+        select
+        <include refid="Base_Column_List" />
+        from task_notify
+        limit #{start},#{limit}
+    </select>
+
+    <!-- 查询全部 -->
+    <select id="selectAll" resultMap="NotifyMap">
+        select
+        <include refid="Base_Column_List" />
+        from task_notify
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectList" resultMap="NotifyMap">
+        select
+        <include refid="Base_Column_List" />
+        from task_notify
+        <where>
+                    <if test="id != null">
+                and id = #{id}
+            </if>
+                    <if test="stuNumber != null and stuNumber != ''">
+                and stu_number = #{stuNumber}
+            </if>
+                    <if test="stuName != null and stuName != ''">
+                and stu_name = #{stuName}
+            </if>
+                    <if test="stuCode != null and stuCode != ''">
+                and stu_code = #{stuCode}
+            </if>
+                    <if test="groupCode != null and groupCode != ''">
+                and group_code = #{groupCode}
+            </if>
+                </where>
+    </select>
+
+    <!-- 新增所有列 -->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into task_notify(id, stu_number, stu_name, stu_code, group_code)
+        values ( #{id}, #{stuNumber}, #{stuName}, #{stuCode}, #{groupCode})
+    </insert>
+    
+    <!-- 批量新增 -->
+    <insert id="batchInsert">
+        insert into task_notify(id, stu_number, stu_name, stu_code, group_code)
+        values 
+        <foreach collection="notifys" item="item" index="index" separator=",">
+        (
+                        #{item.id},                         #{item.stuNumber},                         #{item.stuName},                         #{item.stuCode},                         #{item.groupCode}                     )
+         </foreach>
+    </insert>
+
+    <!-- 通过主键修改数据 -->
+    <update id="update">
+        update post.task_notify
+        <set>
+                    <if test="stuNumber != null and stuNumber != ''">
+                stu_number = #{stuNumber},
+            </if>
+                    <if test="stuName != null and stuName != ''">
+                stu_name = #{stuName},
+            </if>
+                    <if test="stuCode != null and stuCode != ''">
+                stu_code = #{stuCode},
+            </if>
+                    <if test="groupCode != null and groupCode != ''">
+                group_code = #{groupCode},
+            </if>
+                </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from task_notify where id = #{id}
+    </delete>
+    
+    <!-- 总数 -->
+    <select id="count" resultType="int">
+        select count(*) from task_notify
+    </select>
+</mapper>
+

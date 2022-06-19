@@ -4,6 +4,7 @@ import com.project.simbot.dao.RoleDao;
 import com.project.simbot.entity.Role;
 import com.project.simbot.entity.TaskHealth;
 import com.project.simbot.service.TaskHealthService;
+import com.project.simbot.service.TaskNotifyService;
 import com.project.simbot.util.SendMessageUtil;
 import lombok.extern.slf4j.Slf4j;
 import love.forte.common.ioc.annotation.Beans;
@@ -34,6 +35,8 @@ public class BotManagerPrivateListen {
     private TaskHealthService taskHealthService;
     @Depend
     private RoleDao roleDao;
+    @Depend
+    private TaskNotifyService taskNotifyService;
 
     @OnPrivate
     @Filters(value = {
@@ -220,6 +223,26 @@ public class BotManagerPrivateListen {
 
     @OnPrivate
     @Filters(value = {
+            @Filter(value = "软件学院打卡监控群聊-{{groupCode,[1-9]([0-9]{4,9})}}", matchType = MatchType.REGEX_MATCHES)},
+            customFilter = {"ManagerFilter"}
+    )
+    public void setGroupNotify(PrivateMsg msg, Sender sender, @FilterValue("groupCode") String groupCode) {
+        Role group = roleDao.selectByGroupCode(groupCode);
+        if (group == null) {
+            group = new Role();
+            group.setAccountCode(groupCode);
+            group.setLevel("1");
+            group.setType("1");
+            roleDao.insert(group);
+        } else if ("0".equals(group.getLevel())){
+            group.setLevel("1");
+            roleDao.update(group);
+        }
+        sender.sendPrivateMsg(msg, SendMessageUtil.getHealthTaskMessageSuccessHeader().append("监听群聊成功").toString());
+    }
+
+    @OnPrivate
+    @Filters(value = {
             @Filter(value = "软件学院打卡删除群聊-{{groupCode,[1-9]([0-9]{4,9})}}", matchType = MatchType.REGEX_MATCHES)},
             customFilter = {"ManagerFilter"}
     )
@@ -284,4 +307,24 @@ public class BotManagerPrivateListen {
         }
     }
 
+    @OnPrivate
+    @Filters(value = {
+            @Filter(value = "软件学院打卡查询", matchType = MatchType.EQUALS)},
+            customFilter = {"ManagerFilter"}
+    )
+    public void getNotifyTask(PrivateMsg msg, Sender sender) {
+        sender.sendPrivateMsg(msg, SendMessageUtil.generateNotifyMsg().append(SendMessageUtil.generateHeadFace()).append("打卡完成度：")
+                .append(taskNotifyService.getClassFinishMsg()).toString());
+    }
+
+    @OnPrivate
+    @Filters(value = {
+            @Filter(value = "软件学院打卡督促", matchType = MatchType.EQUALS)},
+            customFilter = {"ManagerFilter"}
+    )
+    public void doNotifyTask(PrivateMsg msg, Sender sender) {
+        taskNotifyService.doAtNotify(true);
+        sender.sendPrivateMsg(msg, SendMessageUtil.generateNotifyMsg().append(SendMessageUtil.generateHeadFace()).append("打卡完成度：")
+                .append(taskNotifyService.getClassFinishMsg()).toString());
+    }
 }

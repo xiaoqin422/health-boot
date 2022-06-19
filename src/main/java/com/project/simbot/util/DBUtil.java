@@ -1,8 +1,10 @@
 package com.project.simbot.util;
 
 import cn.hutool.core.io.resource.ResourceUtil;
+import com.project.simbot.dao.NotifyDao;
 import com.project.simbot.dao.RoleDao;
 import com.project.simbot.dao.TaskHealthDao;
+import com.project.simbot.dao.UserDao;
 import love.forte.common.ioc.annotation.Beans;
 import org.apache.ibatis.session.SqlSessionManager;
 
@@ -35,6 +37,15 @@ public class DBUtil {
     @Beans(value = "roleDao", init = true)
     public RoleDao getRoleDao(SqlSessionManager sqlSessionManager) {
         return sqlSessionManager.getMapper(RoleDao.class);
+    }
+
+    @Beans(value = "notifyDao", init = true)
+    public NotifyDao getNotifyDao(SqlSessionManager sqlSessionManager) {
+        return sqlSessionManager.getMapper(NotifyDao.class);
+    }
+    @Beans(value = "userDao", init = true)
+    public UserDao getUserDao(SqlSessionManager sqlSessionManager) {
+        return sqlSessionManager.getMapper(UserDao.class);
     }
 
 }
