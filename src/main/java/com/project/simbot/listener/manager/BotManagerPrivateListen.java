@@ -223,7 +223,7 @@ public class BotManagerPrivateListen {
 
     @OnPrivate
     @Filters(value = {
-            @Filter(value = "软件学院打卡监控群聊-{{groupCode,[1-9]([0-9]{4,9})}}", matchType = MatchType.REGEX_MATCHES)},
+            @Filter(value = "软件学院打卡群聊监听-{{groupCode,[1-9]([0-9]{4,9})}}", matchType = MatchType.REGEX_MATCHES)},
             customFilter = {"ManagerFilter"}
     )
     public void setGroupNotify(PrivateMsg msg, Sender sender, @FilterValue("groupCode") String groupCode) {
@@ -234,11 +234,27 @@ public class BotManagerPrivateListen {
             group.setLevel("1");
             group.setType("1");
             roleDao.insert(group);
-        } else if ("0".equals(group.getLevel())){
+        } else if ("0".equals(group.getLevel())) {
             group.setLevel("1");
             roleDao.update(group);
         }
         sender.sendPrivateMsg(msg, SendMessageUtil.getHealthTaskMessageSuccessHeader().append("监听群聊成功").toString());
+    }
+
+    @OnPrivate
+    @Filters(value = {
+            @Filter(value = "软件学院打卡群聊监听取消-{{groupCode,[1-9]([0-9]{4,9})}}", matchType = MatchType.REGEX_MATCHES)},
+            customFilter = {"ManagerFilter"}
+    )
+    public void setGroupNotifyFalse(PrivateMsg msg, Sender sender, @FilterValue("groupCode") String groupCode) {
+        Role group = roleDao.selectByGroupCode(groupCode);
+        if (group != null && "1".equals(group.getLevel())) {
+            group.setLevel("0");
+            roleDao.update(group);
+            sender.sendPrivateMsg(msg, SendMessageUtil.getHealthTaskMessageSuccessHeader().append("取消群聊监听成功").toString());
+        } else {
+            sender.sendPrivateMsg(msg, SendMessageUtil.getHealthTaskMessageSuccessHeader().append("请先添加群聊").toString());
+        }
     }
 
     @OnPrivate
@@ -313,8 +329,7 @@ public class BotManagerPrivateListen {
             customFilter = {"ManagerFilter"}
     )
     public void getNotifyTask(PrivateMsg msg, Sender sender) {
-        sender.sendPrivateMsg(msg, SendMessageUtil.generateNotifyMsg().append(SendMessageUtil.generateHeadFace()).append("打卡完成度：")
-                .append(taskNotifyService.getClassFinishMsg()).toString());
+        sender.sendPrivateMsg(msg,taskNotifyService.getUnFinishMsg("454062801",false,false).toString());
     }
 
     @OnPrivate
@@ -323,8 +338,6 @@ public class BotManagerPrivateListen {
             customFilter = {"ManagerFilter"}
     )
     public void doNotifyTask(PrivateMsg msg, Sender sender) {
-        taskNotifyService.doAtNotify(true);
-        sender.sendPrivateMsg(msg, SendMessageUtil.generateNotifyMsg().append(SendMessageUtil.generateHeadFace()).append("打卡完成度：")
-                .append(taskNotifyService.getClassFinishMsg()).toString());
+        sender.sendPrivateMsg(msg,taskNotifyService.getUnFinishMsg("454062801",false,true).toString());
     }
 }

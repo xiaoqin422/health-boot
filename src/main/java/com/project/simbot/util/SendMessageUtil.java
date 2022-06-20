@@ -17,22 +17,28 @@ import java.util.Random;
 public class SendMessageUtil {
     private static final Random RANDOM = new Random();
     public static StringBuilder getHealthTaskMessageSuccessHeader() {
-        return new StringBuilder().append("指令执行完毕。"
+        return generateHeadFace().append("指令执行完毕。"
                 + "\n-------------------\n");
     }
 
     public static StringBuilder getHealthTaskMessageFailHeader() {
-        return new StringBuilder().append("指令执行异常。"
+        return generateHeadFace().append("指令执行异常。"
                 + "\n-------------------\n");
     }
 
     public static StringBuilder getHealthTaskMessageLog(String log) {
         String[] split = log.split("\\|");
-        return getHealthTaskMessageSuccessHeader().append(
-                "居民身份证：" + split[0] +
-                        "\n打卡时间：" + split[1] +
-                        "\n体温：" + split[2] +
-                        "\n反馈信息：" + split[3]);
+        return getHealthTaskMessageSuccessHeader()
+                .append("居民身份证：")
+                .append(split[0])
+                .append("\n打卡位置：")
+                .append(split[1])
+                .append("\n打卡时间：")
+                .append(split[2])
+                .append("\n体温：")
+                .append(split[3])
+                .append("\n反馈信息：")
+                .append(split[4]);
     }
 
     public static String getHealthTaskMessageLogNoHeader(String log) {
@@ -77,17 +83,18 @@ public class SendMessageUtil {
                 "【7】  软件学院打卡任务管理\n" +
                 "【8】  软件学院打卡添加用户-QQ号码\n" +
                 "【9】  软件学院打卡删除用户-QQ号码\n" +
-                "【10】软件学院打卡用户管理\n" +
-                "【11】软件学院打卡设置管理员-QQ号码\n" +
-                "【12】软件学院打卡添加群聊-QQ群号码\n" +
-                "【13】软件学院打卡删除群聊-QQ群号码\n" +
-                "【14】软件学院打卡群聊管理\n" +
-                "【15】软件学院打卡任务日志管理\n" +
-                "【16】软件学院打卡任务日志查询-QQ号码\n" +
-                "【17】软件学院打卡执行定时\n" +
-                "【18】软件学院打卡监控群聊-QQ群号码\n" +
-                "【19】软件学院打卡查询\n" +
-                "【20】软件学院打卡督促\n";
+                "【10】 软件学院打卡用户管理\n" +
+                "【11】 软件学院打卡设置管理员-QQ号码\n" +
+                "【12】 软件学院打卡添加群聊-QQ群号码\n" +
+                "【13】 软件学院打卡删除群聊-QQ群号码\n" +
+                "【14】 软件学院打卡群聊管理\n" +
+                "【15】 软件学院打卡任务日志管理\n" +
+                "【16】 软件学院打卡任务日志查询-QQ号码\n" +
+                "【17】 软件学院打卡执行定时\n" +
+                "【18】 软件学院打卡群聊监听\n" +
+                "【19】 软件学院打卡群聊监听取消\n" +
+                "【20】 软件学院打卡查询\n" +
+                "【21】 软件学院打卡督促\n";
     }
 
     public static String getTaskInfo(TaskHealth taskHealth) {
@@ -117,7 +124,7 @@ public class SendMessageUtil {
                 .append("是否加入定时：").append("2".equals(taskHealth.getStatus()) ? "是" : "否").append("\n");
     }
     public static StringBuilder generateHeadFace(){
-        return new StringBuilder(CatCodeUtil.INSTANCE.getNekoTemplate().face(RANDOM.nextInt(248)));
+        return new StringBuilder(CatCodeUtil.INSTANCE.getNekoTemplate().face(RANDOM.nextInt(225)));
     }
     public static StringBuilder generateNotifyMsg(){
         return generateHeadFace().append( "体温打卡小贴士\n");

@@ -156,15 +156,15 @@ public class TaskHealthServiceImpl implements TaskHealthService {
         try {
             result = (JSONObject) JSON.parse(response.body());
         } catch (Exception e) {
-            return pid + "|" + time + "|" + "打卡失败|" + "系统发生错误! 身份证信息未经系统认证！";
+            return pid.substring(0, 6) + "****" + pid.substring(14) + "|" + address + "|" + time + "|" + "打卡失败|" + "系统发生错误! 身份证信息未经系统认证！";
         }
         String code = (String) result.get("code");
         String msg = UnicodeUtil.toString((String) result.get("msg"));
         if (code.equals("200") || (code.equals("400") && msg.equals("您已提交当前时段数据！请勿重复提交！"))) {
-            resultMsg = pid.substring(0, 6) + "****" + pid.substring(14) + "|" + time + "|" + tw + "|" + msg;
+            resultMsg = pid.substring(0, 6) + "****" + pid.substring(14) + "|" + address + "|" + time + "|" + tw + "|" + msg;
             log.info(resultMsg);
         } else {
-            resultMsg = pid + "|" + time + "|" + "打卡失败|" + msg;
+            resultMsg = pid.substring(0, 6) + "****" + pid.substring(14) + "|" + address + "|" + time + "|" + "打卡失败|" + msg;
             log.error(resultMsg);
         }
         return resultMsg;
@@ -204,11 +204,12 @@ public class TaskHealthServiceImpl implements TaskHealthService {
                 String s = healthPost(health.getAddress(), health.getPid());
                 health.setLog(s);
                 taskHealthDao.update(health);
+                StringBuilder msg = SendMessageUtil.getHealthTaskMessageLog(s);
                 if (StrUtil.isBlank(health.getGroupCode())) {
-                    sender.sendPrivateMsg(health.getAccountCode(), SendMessageUtil.getHealthTaskMessageLog(s).toString());
+                    sender.sendPrivateMsg(health.getAccountCode(), msg.toString());
                 } else {
                     try {
-                        sender.sendPrivateMsgAsync(health.getAccountCode(), health.getGroupCode(), SendMessageUtil.getHealthTaskMessageLog(s).toString());
+                        sender.sendPrivateMsgAsync(health.getAccountCode(), health.getGroupCode(), msg.toString());
                     } catch (Exception e) {
                         log.error(e.toString());
                     }

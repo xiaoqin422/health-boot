@@ -55,7 +55,7 @@ public class TaskNotifyServiceImpl implements TaskNotifyService {
 
     @Override
     public boolean classIsFinished() {
-        String percentage = getClassFinishMsg();
+        String percentage = getClassFinishMsg("19130406");
         if (!StrUtil.isEmptyIfStr(percentage) && percentage.startsWith("100")) {
             return true;
         } else {
@@ -65,12 +65,50 @@ public class TaskNotifyServiceImpl implements TaskNotifyService {
     }
 
     @Override
-    public Map<String, Object> getUnFinishMsg() {
-        return getStuMsg();
+    public StringBuilder getUnFinishMsg(String classCode,boolean isAt,boolean isNotifySelf) {
+        Getter getter = botManager.getDefaultBot().getSender().GETTER;
+        Sender sender = botManager.getDefaultBot().getSender().SENDER;
+        // 获取群来中的永辉西南西
+        GroupMemberList groupMemberList = getter.getGroupMemberList(classCode);
+        // 获取需要监控的班级成员QQ列表
+        List<String> notifies = notifyDao.searchByGroupCode(classCode);
+        // 获取到群中所有是监听群组的成员
+        groupMemberList.stream().filter(obj -> notifies.contains(obj.getAccountCode())).collect(Collectors.toList());
+        // 获取没有完成任务的人员
+        Map<String, Object> unFinishMsg = getStuMsg();
+        StringBuilder msg = SendMessageUtil.generateNotifyMsg()
+                .append(SendMessageUtil.generateHeadFace()).append("打卡完成度：")
+                .append(getClassFinishMsg("19130406")).append("\n");
+        int count = 0;
+        StringBuilder nameList = SendMessageUtil.generateHeadFace().append("未打卡人员:");
+        StringBuilder atList = SendMessageUtil.generateHeadFace().append("\"打卡不规范，开学两行泪\"");
+        // 群聊中被监听的班级成员
+        for (GroupMemberInfo info : groupMemberList) {
+            String accountCode = info.getAccountCode();
+            Notify notify = notifyDao.searchStuCode(accountCode);
+            // 判断该用户是否完成打卡
+            if (notify != null && unFinishMsg.get(notify.getStuNumber()) != null) {
+                count ++;
+                nameList.append(notify.getStuName()).append(" ");
+                atList.append(CatCodeUtil.INSTANCE.getNekoTemplate().at(accountCode));
+                if (isNotifySelf){
+                    sender.sendPrivateMsgAsync(accountCode,classCode,SendMessageUtil.generateNotifyMsg().append("及时完成打卡哟~").toString());
+                }
+            }
+        }
+        // 如果群聊中所有班级成员已经打卡 则不发送该消息
+        if (count != 0){
+            msg.append(nameList).append("\n");
+            if (isAt){
+                msg.append(atList).append("及时完成打卡哟~");
+            }
+        }else {
+            msg.append(SendMessageUtil.generateHeadFace()).append("谢谢大家配合呦~");
+        }
+        return msg;
     }
 
-    @Override
-    public String getClassFinishMsg() {
+    private String getClassFinishMsg(String classCode) {
         HttpRequest client = HttpUtil.createPost(CLASS_URL);
         client.header("authorization", loginAndGetToken());
         Map param = new HashMap<>();
@@ -81,7 +119,7 @@ public class TaskNotifyServiceImpl implements TaskNotifyService {
         JSONObject jsonObject = JSON.parseObject(response.body());
         if (200 == Integer.parseInt(jsonObject.get("code").toString())) {
             List<JSONObject> list = (List<JSONObject>) jsonObject.get("data");
-            list = list.stream().filter(object -> "19130406".equals(object.get("title").toString()))
+            list = list.stream().filter(object -> classCode.equals(object.get("title").toString()))
                     .collect(Collectors.toList());
             JSONObject object = list.get(0);
             Object percentage = object.get("percentage");
@@ -101,41 +139,18 @@ public class TaskNotifyServiceImpl implements TaskNotifyService {
 
     @Override
     public void doAtNotify(boolean isNotifySelf) {
-        Getter getter = botManager.getDefaultBot().getSender().GETTER;
-        Sender sender = botManager.getDefaultBot().getSender().SENDER;
         if (!classIsFinished()) {
+            Sender sender = botManager.getDefaultBot().getSender().SENDER;
+            // 获取监控群聊号码
             List<String> groupCode = roleDao.selectGroupCodeByLevel("1");
             for (String s : groupCode) {
-                // 获取群来中的永辉西南西
-                GroupMemberList groupMemberList = getter.getGroupMemberList(s);
-                // 获取需要监控的班级成员QQ列表
-                List<String> notifies = notifyDao.searchByGroupCode(s);
-                // 获取到群中所有是监听群组的成员
-                groupMemberList.stream().filter(obj -> notifies.contains(obj.getAccountCode())).collect(Collectors.toList());
-                // 获取没有完成任务的人员
-                Map<String, Object> unFinishMsg = getStuMsg();
-                StringBuilder msg = SendMessageUtil.generateNotifyMsg();
-                StringBuilder nameList = SendMessageUtil.generateHeadFace().append("未打卡人员:");
-                StringBuilder atList = SendMessageUtil.generateHeadFace().append("\"打卡不规范，开学两行泪\"");
-                // 群聊中被监听的班级成员
-                for (GroupMemberInfo info : groupMemberList) {
-                    String accountCode = info.getAccountCode();
-                    Notify notify = notifyDao.searchStuCode(accountCode);
-                    // 判断该用户是否完成打卡
-                    if (notify != null && unFinishMsg.get(notify.getStuNumber()) != null) {
-                        nameList.append(notify.getStuName() + " ");
-                        atList.append(CatCodeUtil.INSTANCE.getNekoTemplate().at(accountCode));
-                        if (isNotifySelf){
-                            sender.sendPrivateMsgAsync(accountCode,s,SendMessageUtil.generateNotifyMsg().append("及时完成打卡哟~").toString());
-                        }
-                    }
-                }
-                msg.append(nameList).append("\n").append(atList);
-                sender.sendGroupMsg(getter.getGroupInfo(s), msg + "\n及时完成打卡哟~");
+                sender.sendGroupMsg(s, getUnFinishMsg(s,true,isNotifySelf) + "\n及时完成打卡哟~");
             }
         }
 
     }
+
+
 
     private Map<String, Object> getStuMsg() {
         HttpRequest client = HttpUtil.createPost(STU_URL);

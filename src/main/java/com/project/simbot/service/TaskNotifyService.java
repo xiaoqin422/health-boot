@@ -16,7 +16,6 @@ import java.util.Map;
  **/
 public interface TaskNotifyService {
     boolean classIsFinished();
-    Map<String,Object> getUnFinishMsg();
-    String getClassFinishMsg();
+    StringBuilder getUnFinishMsg(String classCode,boolean isAt,boolean isNotifySelf);
     void doAtNotify(boolean isNotifySelf);
 }
