@@ -144,7 +144,7 @@ public class TaskNotifyServiceImpl implements TaskNotifyService {
             // 获取监控群聊号码
             List<String> groupCode = roleDao.selectGroupCodeByLevel("1");
             for (String s : groupCode) {
-                sender.sendGroupMsg(s, getUnFinishMsg(s,true,isNotifySelf) + "\n及时完成打卡哟~");
+                sender.sendGroupMsg(s, getUnFinishMsg(s,true,isNotifySelf).toString());
             }
         }
 

@@ -49,6 +49,17 @@ public class AutoTaskService {
             taskNotifyService.doAtNotify(false);
         }
     }
+
+    /**
+     * 11点未完成打卡，私聊管理员提醒
+     */
+    @Cron(value = "0 0 11 * * ? ")
+    public void t(){
+        if (!taskNotifyService.classIsFinished()){
+            msgUtil.sendMsg(taskNotifyService.getUnFinishMsg("454062801",false,false).append("\n")
+                    .append("---督促可发送指令[软件学院打卡督促]---").toString());
+        }
+    }
     @Cron(value = "0 30 9 * * ? ")
     public void doNotifyTask_1(){
         if (taskNotifyService.classIsFinished()){
